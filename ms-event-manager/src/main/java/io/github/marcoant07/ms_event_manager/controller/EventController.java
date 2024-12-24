@@ -5,8 +5,10 @@ import io.github.marcoant07.ms_event_manager.dto.CreateEventDTO;
 import io.github.marcoant07.ms_event_manager.dto.GetEventDTO;
 import io.github.marcoant07.ms_event_manager.dto.mapper.Mapper;
 import io.github.marcoant07.ms_event_manager.entity.Event;
+import io.github.marcoant07.ms_event_manager.errors.NotFoundException;
 import io.github.marcoant07.ms_event_manager.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,5 +46,13 @@ public class EventController {
         List<Event> events = eventRepository.findAll();
 
         return ResponseEntity.status(HttpStatus.OK).body(Mapper.toListDTO(events));
+    }
+
+    @GetMapping("/get-event/{id}")
+    public ResponseEntity<GetEventDTO> getById(@PathVariable("id") String id){
+
+        Event event = eventRepository.findById(id).orElseThrow(NotFoundException::new);
+
+        return ResponseEntity.status(HttpStatus.OK).body(Mapper.toEventDTO(event));
     }
 }

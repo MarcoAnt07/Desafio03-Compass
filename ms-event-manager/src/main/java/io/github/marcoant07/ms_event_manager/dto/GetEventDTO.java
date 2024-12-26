@@ -9,7 +9,6 @@ import java.util.Objects;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class GetEventDTO {
 
     private String id;

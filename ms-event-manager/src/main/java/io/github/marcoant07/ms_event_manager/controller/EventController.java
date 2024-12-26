@@ -55,4 +55,16 @@ public class EventController {
 
         return ResponseEntity.status(HttpStatus.OK).body(Mapper.toEventDTO(event));
     }
+
+    @DeleteMapping("/delete-event/{id}")
+    public ResponseEntity<Void> deletePostById(@PathVariable String id){
+
+        Event event = eventRepository.findById(id).orElseThrow(
+                NotFoundException::new
+        );
+
+        eventRepository.deleteById(id);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

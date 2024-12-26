@@ -5,9 +5,10 @@ import io.github.marcoant07.ms_event_manager.dto.EventDTO;
 import io.github.marcoant07.ms_event_manager.dto.GetEventDTO;
 import io.github.marcoant07.ms_event_manager.dto.mapper.Mapper;
 import io.github.marcoant07.ms_event_manager.entity.Event;
-import io.github.marcoant07.ms_event_manager.errors.NotFoundException;
+import io.github.marcoant07.ms_event_manager.exception.NotFoundException;
 import io.github.marcoant07.ms_event_manager.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,13 @@ public class EventController {
     @GetMapping("/get-all-events")
     public ResponseEntity<List<GetEventDTO>> getAllEvents(){
         List<Event> events = eventRepository.findAll();
+
+        return ResponseEntity.status(HttpStatus.OK).body(Mapper.toListDTO(events));
+    }
+
+    @GetMapping("/get-all-events/sorted")
+    public ResponseEntity<List<GetEventDTO>> getAllEventsSorted(){
+        List<Event> events = eventRepository.findAll(Sort.by(Sort.Direction.ASC, "eventName"));
 
         return ResponseEntity.status(HttpStatus.OK).body(Mapper.toListDTO(events));
     }

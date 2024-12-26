@@ -1,4 +1,4 @@
-package io.github.marcoant07.ms_event_manager.errors;
+package io.github.marcoant07.ms_event_manager.exception;
 
 public class NotFoundException extends RuntimeException{
     public NotFoundException(){

@@ -2,33 +2,35 @@ package io.github.marcoant07.ms_ticket_manager.dto;
 
 import io.github.marcoant07.ms_ticket_manager.entity.Event;
 
-public class CreateTicketDTO {
+import java.util.Objects;
 
-    private Long id;
+public class TicketResponseDTO {
+
+    private String id;
     private String costumerName;
     private String cpf;
     private String custumerMail;
-    private String eventId;
+    private Event event;
     private Double BRLamount;
     private Double USDamount;
 
-    public CreateTicketDTO() {
-    }
-
-    public CreateTicketDTO(String costumerName, String cpf, String custumerMail, String eventId, Double BRLamount, Double USDamount) {
+    public TicketResponseDTO(String costumerName, String cpf, String custumerMail, Event event, Double BRLamount, Double USDamount) {
         this.costumerName = costumerName;
         this.cpf = cpf;
         this.custumerMail = custumerMail;
-        this.eventId = eventId;
+        this.event = event;
         this.BRLamount = BRLamount;
         this.USDamount = USDamount;
     }
 
-    public Long getId() {
+    public TicketResponseDTO() {
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -56,12 +58,12 @@ public class CreateTicketDTO {
         this.custumerMail = custumerMail;
     }
 
-    public String getEventId() {
-        return eventId;
+    public Event getEvent() {
+        return event;
     }
 
-    public void setEventId(String eventId) {
-        this.eventId = eventId;
+    public void setEvent(Event event) {
+        this.event = event;
     }
 
     public Double getBRLamount() {
@@ -78,5 +80,18 @@ public class CreateTicketDTO {
 
     public void setUSDamount(Double USDamount) {
         this.USDamount = USDamount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TicketResponseDTO that = (TicketResponseDTO) o;
+        return Objects.equals(id, that.id) && Objects.equals(costumerName, that.costumerName) && Objects.equals(cpf, that.cpf) && Objects.equals(custumerMail, that.custumerMail) && Objects.equals(event, that.event) && Objects.equals(BRLamount, that.BRLamount) && Objects.equals(USDamount, that.USDamount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, costumerName, cpf, custumerMail, event, BRLamount, USDamount);
     }
 }

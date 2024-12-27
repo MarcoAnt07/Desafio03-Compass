@@ -2,10 +2,13 @@ package io.github.marcoant07.ms_ticket_manager.dto.mapper;
 
 import io.github.marcoant07.ms_ticket_manager.dto.EmailDTO;
 import io.github.marcoant07.ms_ticket_manager.dto.TicketDTO;
+import io.github.marcoant07.ms_ticket_manager.dto.TicketResponseDTO;
 import io.github.marcoant07.ms_ticket_manager.entity.Email;
 import io.github.marcoant07.ms_ticket_manager.entity.Event;
 import io.github.marcoant07.ms_ticket_manager.entity.Ticket;
 import org.modelmapper.ModelMapper;
+
+import java.util.Optional;
 
 public class Mapper {
 
@@ -38,5 +41,9 @@ public class Mapper {
 
     public static TicketDTO toTicketDTO(Ticket ticket){
         return new ModelMapper().map(ticket, TicketDTO.class);
+    }
+
+    public static TicketResponseDTO toTicketResponseDTO(Ticket ticket){
+        return new ModelMapper().map(ticket, TicketResponseDTO.class);
     }
 }

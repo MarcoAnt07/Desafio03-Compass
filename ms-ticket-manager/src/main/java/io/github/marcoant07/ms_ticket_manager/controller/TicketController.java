@@ -1,10 +1,8 @@
 package io.github.marcoant07.ms_ticket_manager.controller;
 
-import io.github.marcoant07.ms_ticket_manager.dto.EmailDTO;
 import io.github.marcoant07.ms_ticket_manager.dto.TicketDTO;
 import io.github.marcoant07.ms_ticket_manager.dto.TicketResponseDTO;
 import io.github.marcoant07.ms_ticket_manager.dto.mapper.Mapper;
-import io.github.marcoant07.ms_ticket_manager.entity.Email;
 import io.github.marcoant07.ms_ticket_manager.entity.Event;
 import io.github.marcoant07.ms_ticket_manager.entity.Ticket;
 import io.github.marcoant07.ms_ticket_manager.repository.TicketRepository;
@@ -15,8 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("ticket")
@@ -48,6 +44,19 @@ public class TicketController {
         Ticket ticket = ticketRepository.findTicketById(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(Mapper.toTicketResponseDTO(ticket));
+    }
+
+    @PutMapping("/update-ticket/{id}")
+    public ResponseEntity<Ticket> updateTicketById(@PathVariable("id") String id, @RequestBody TicketDTO ticketDTO){
+
+        Ticket ticket = ticketRepository.findTicketById(id);
+        Event event = fetchEventById(ticketDTO.getEventId());
+        ticket = Mapper.toTicket(ticketDTO, event);
+        Ticket savedTicket = ticketRepository.save(ticket);
+
+        emailService.sendEmailUpdate(ticket);
+
+        return ResponseEntity.status(HttpStatus.OK).body(savedTicket);
     }
 
     private Event fetchEventById(String eventId){

@@ -4,7 +4,7 @@ import io.github.marcoant07.ms_ticket_manager.entity.Event;
 
 public class TicketDTO {
 
-    private Long id;
+    private String id;
     private String costumerName;
     private String cpf;
     private String custumerMail;
@@ -24,11 +24,11 @@ public class TicketDTO {
         this.USDamount = USDamount;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

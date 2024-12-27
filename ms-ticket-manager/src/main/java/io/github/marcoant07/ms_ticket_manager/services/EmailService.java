@@ -23,8 +23,9 @@ public class EmailService {
 
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(ticket.getCustumerMail());
-            message.setSubject("Confirmação do Ticket");
+            message.setSubject("Ticket Confirmation");
             message.setText(
+                            "Ticket Data: " + "\n\n" +
                             "Ticket ID: " + ticket.getId() + "\n" +
                             "Customer Name: " + ticket.getCostumerName() + "\n" +
                             "Event ID: " + ticket.getEvent().getId() + "\n" +
@@ -41,6 +42,33 @@ public class EmailService {
             emailSender.send(message);
 
             ticketPublisher.solicitarTicket(ticket);
+
+    }
+
+    @Transactional
+    public void sendEmailUpdate(Ticket ticket){
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(ticket.getCustumerMail());
+        message.setSubject("Ticket Update");
+        message.setText(
+                        "Updated Ticket Data: " + "\n\n" +
+                        "Ticket ID: " + ticket.getId() + "\n" +
+                        "Customer Name: " + ticket.getCostumerName() + "\n" +
+                        "Event ID: " + ticket.getEvent().getId() + "\n" +
+                        "Event Name: " + ticket.getEvent().getEventName() + "\n" +
+                        "Event Date and Time: " + ticket.getEvent().getDateTime() + "\n" +
+                        "Event CEP: " + ticket.getEvent().getCep() + "\n" +
+                        "Event Public Place: " + ticket.getEvent().getLogradouro() + "\n" +
+                        "Event Neighborhood: " + ticket.getEvent().getBairro() + "\n" +
+                        "Event City: " + ticket.getEvent().getCidade() + "\n" +
+                        "Event UF: " + ticket.getEvent().getCidade() + "\n" +
+                        "BRL Amount: " + ticket.getBRLamount() + "\n" +
+                        "USD Amount: " + ticket.getUSDamount()
+        );
+        emailSender.send(message);
+
+        ticketPublisher.solicitarTicket(ticket);
 
     }
 }

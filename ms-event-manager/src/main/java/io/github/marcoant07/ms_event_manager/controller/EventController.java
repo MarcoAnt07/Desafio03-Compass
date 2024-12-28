@@ -7,6 +7,10 @@ import io.github.marcoant07.ms_event_manager.dto.mapper.Mapper;
 import io.github.marcoant07.ms_event_manager.entity.Event;
 import io.github.marcoant07.ms_event_manager.exception.NotFoundException;
 import io.github.marcoant07.ms_event_manager.repository.EventRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -17,12 +21,22 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @RestController
-@RequestMapping("event")
+@RequestMapping("api/v1")
 public class EventController {
 
     @Autowired
     private EventRepository eventRepository;
 
+    @Operation(summary = "Create a new event", responses = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Resource created",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Event.class)
+                    )
+            )
+    })
     @PostMapping("/create-event")
     public ResponseEntity<Event> createEvent(@RequestBody EventDTO eventDTO){
 
@@ -41,6 +55,16 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedEvent);
     }
 
+    @Operation(summary = "Get all events", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "List of all events",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = GetEventDTO.class)
+                    )
+            )
+    })
     @GetMapping("/get-all-events")
     public ResponseEntity<List<GetEventDTO>> getAllEvents(){
         List<Event> events = eventRepository.findAll();
@@ -48,6 +72,16 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.OK).body(Mapper.toListDTO(events));
     }
 
+    @Operation(summary = "Get all events sorted", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "List of all events sorted",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = GetEventDTO.class)
+                    )
+            )
+    })
     @GetMapping("/get-all-events/sorted")
     public ResponseEntity<List<GetEventDTO>> getAllEventsSorted(){
         List<Event> events = eventRepository.findAll(Sort.by(Sort.Direction.ASC, "eventName"));
@@ -55,6 +89,16 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.OK).body(Mapper.toListDTO(events));
     }
 
+    @Operation(summary = "Get event by ID", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Event details",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = GetEventDTO.class)
+                    )
+            )
+    })
     @GetMapping("/get-event/{id}")
     public ResponseEntity<GetEventDTO> getById(@PathVariable("id") String id){
 
@@ -65,6 +109,24 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.OK).body(Mapper.toEventDTO(event));
     }
 
+    @Operation(summary = "Update an event by ID", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Event updated successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Event.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Conflict - Tickets linked to this event",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Event.class)
+                    )
+            )
+    })
     @PutMapping("/update-event/{id}")
     public ResponseEntity<Event> updateEventById(@PathVariable("id") String id, @RequestBody EventDTO eventDTO){
 
@@ -90,6 +152,32 @@ public class EventController {
 
     }
 
+    @Operation(summary = "Delete an event by ID", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Event deleted successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Void.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Event not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = NotFoundException.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Conflict - Tickets linked to this event",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Void.class)
+                    )
+            )
+    })
     @DeleteMapping("/delete-event/{id}")
     public ResponseEntity<Void> deletePostById(@PathVariable String id){
 

@@ -72,6 +72,16 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.OK).body(Mapper.toListDTO(events));
     }
 
+    @Operation(summary = "Get all events sorted", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "List of all events sorted",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = GetEventDTO.class)
+                    )
+            )
+    })
     @GetMapping("/get-all-events/sorted")
     public ResponseEntity<List<GetEventDTO>> getAllEventsSorted(){
         List<Event> events = eventRepository.findAll(Sort.by(Sort.Direction.ASC, "eventName"));

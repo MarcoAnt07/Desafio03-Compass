@@ -109,6 +109,24 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.OK).body(Mapper.toEventDTO(event));
     }
 
+    @Operation(summary = "Update an event by ID", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Event updated successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Event.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Conflict - Tickets linked to this event",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Event.class)
+                    )
+            )
+    })
     @PutMapping("/update-event/{id}")
     public ResponseEntity<Event> updateEventById(@PathVariable("id") String id, @RequestBody EventDTO eventDTO){
 

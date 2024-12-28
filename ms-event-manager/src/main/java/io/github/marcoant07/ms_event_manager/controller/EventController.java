@@ -89,6 +89,16 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.OK).body(Mapper.toListDTO(events));
     }
 
+    @Operation(summary = "Get event by ID", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Event details",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = GetEventDTO.class)
+                    )
+            )
+    })
     @GetMapping("/get-event/{id}")
     public ResponseEntity<GetEventDTO> getById(@PathVariable("id") String id){
 

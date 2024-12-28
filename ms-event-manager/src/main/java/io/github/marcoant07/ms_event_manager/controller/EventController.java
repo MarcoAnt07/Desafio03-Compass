@@ -152,6 +152,32 @@ public class EventController {
 
     }
 
+    @Operation(summary = "Delete an event by ID", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Event deleted successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Void.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Event not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = NotFoundException.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Conflict - Tickets linked to this event",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Void.class)
+                    )
+            )
+    })
     @DeleteMapping("/delete-event/{id}")
     public ResponseEntity<Void> deletePostById(@PathVariable String id){
 

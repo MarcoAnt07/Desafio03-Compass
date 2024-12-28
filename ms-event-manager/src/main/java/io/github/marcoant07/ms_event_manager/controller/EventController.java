@@ -55,6 +55,16 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedEvent);
     }
 
+    @Operation(summary = "Get all events", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "List of all events",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = GetEventDTO.class)
+                    )
+            )
+    })
     @GetMapping("/get-all-events")
     public ResponseEntity<List<GetEventDTO>> getAllEvents(){
         List<Event> events = eventRepository.findAll();

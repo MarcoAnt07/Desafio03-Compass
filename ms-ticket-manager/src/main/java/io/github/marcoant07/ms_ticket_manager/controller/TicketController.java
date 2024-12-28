@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
-@RequestMapping("ticket")
+@RequestMapping("api/v1")
 @Slf4j
 public class TicketController {
 
@@ -57,6 +57,21 @@ public class TicketController {
         emailService.sendEmailUpdate(ticket);
 
         return ResponseEntity.status(HttpStatus.OK).body(savedTicket);
+    }
+
+    @DeleteMapping("/cancel-ticket/{id}")
+    public ResponseEntity<Void> deleteTicketById(@PathVariable("id") String id){
+
+        Ticket ticket = ticketRepository.findActiveTicketById(id);
+
+        if(ticket == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        ticket.setDeleted(true);
+        ticketRepository.save(ticket);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     private Event fetchEventById(String eventId){

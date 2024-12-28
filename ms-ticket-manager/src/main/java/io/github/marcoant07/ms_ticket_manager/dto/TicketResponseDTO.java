@@ -13,6 +13,7 @@ public class TicketResponseDTO {
     private Event event;
     private Double BRLamount;
     private Double USDamount;
+    private Boolean deleted;
 
     public TicketResponseDTO(String costumerName, String cpf, String custumerMail, Event event, Double BRLamount, Double USDamount) {
         this.costumerName = costumerName;
@@ -80,6 +81,14 @@ public class TicketResponseDTO {
 
     public void setUSDamount(Double USDamount) {
         this.USDamount = USDamount;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Override

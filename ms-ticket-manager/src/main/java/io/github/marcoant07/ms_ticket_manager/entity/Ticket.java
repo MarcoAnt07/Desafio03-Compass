@@ -20,6 +20,7 @@ public class Ticket {
     private Event event;
     private Double BRLamount;
     private Double USDamount;
+    private Boolean deleted = false;
 
     public Ticket() {
     }
@@ -87,6 +88,14 @@ public class Ticket {
 
     public void setUSDamount(Double USDamount) {
         this.USDamount = USDamount;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Override

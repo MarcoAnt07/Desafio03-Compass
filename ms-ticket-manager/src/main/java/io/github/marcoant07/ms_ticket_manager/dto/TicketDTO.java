@@ -2,6 +2,8 @@ package io.github.marcoant07.ms_ticket_manager.dto;
 
 import io.github.marcoant07.ms_ticket_manager.entity.Event;
 
+import java.util.Objects;
+
 public class TicketDTO {
 
     private String id;
@@ -11,6 +13,7 @@ public class TicketDTO {
     private String eventId;
     private Double BRLamount;
     private Double USDamount;
+    private Boolean deleted;
 
     public TicketDTO() {
     }
@@ -78,5 +81,26 @@ public class TicketDTO {
 
     public void setUSDamount(Double USDamount) {
         this.USDamount = USDamount;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TicketDTO ticketDTO = (TicketDTO) o;
+        return Objects.equals(id, ticketDTO.id) && Objects.equals(costumerName, ticketDTO.costumerName) && Objects.equals(cpf, ticketDTO.cpf) && Objects.equals(custumerMail, ticketDTO.custumerMail) && Objects.equals(eventId, ticketDTO.eventId) && Objects.equals(BRLamount, ticketDTO.BRLamount) && Objects.equals(USDamount, ticketDTO.USDamount) && Objects.equals(deleted, ticketDTO.deleted);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, costumerName, cpf, custumerMail, eventId, BRLamount, USDamount, deleted);
     }
 }

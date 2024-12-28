@@ -7,6 +7,10 @@ import io.github.marcoant07.ms_event_manager.dto.mapper.Mapper;
 import io.github.marcoant07.ms_event_manager.entity.Event;
 import io.github.marcoant07.ms_event_manager.exception.NotFoundException;
 import io.github.marcoant07.ms_event_manager.repository.EventRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -17,12 +21,22 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @RestController
-@RequestMapping("event")
+@RequestMapping("api/v1")
 public class EventController {
 
     @Autowired
     private EventRepository eventRepository;
 
+    @Operation(summary = "Create a new event", responses = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Resource created",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Event.class)
+                    )
+            )
+    })
     @PostMapping("/create-event")
     public ResponseEntity<Event> createEvent(@RequestBody EventDTO eventDTO){
 

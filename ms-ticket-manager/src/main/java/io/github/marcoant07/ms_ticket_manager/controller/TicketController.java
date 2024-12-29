@@ -70,6 +70,16 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.OK).body(Mapper.toTicketResponseDTO(ticket));
     }
 
+    @Operation(summary = "Update an ticket by ID", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Ticket updated successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Ticket.class)
+                    )
+            )
+    })
     @PutMapping("/update-ticket/{id}")
     public ResponseEntity<Ticket> updateTicketById(@PathVariable("id") String id, @RequestBody TicketDTO ticketDTO){
 

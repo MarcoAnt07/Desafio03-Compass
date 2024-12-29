@@ -5,6 +5,7 @@ import io.github.marcoant07.ms_ticket_manager.dto.TicketResponseDTO;
 import io.github.marcoant07.ms_ticket_manager.dto.mapper.Mapper;
 import io.github.marcoant07.ms_ticket_manager.entity.Event;
 import io.github.marcoant07.ms_ticket_manager.entity.Ticket;
+import io.github.marcoant07.ms_ticket_manager.exception.NotFoundException;
 import io.github.marcoant07.ms_ticket_manager.repository.TicketRepository;
 import io.github.marcoant07.ms_ticket_manager.services.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -70,7 +71,7 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.OK).body(Mapper.toTicketResponseDTO(ticket));
     }
 
-    @Operation(summary = "Update an ticket by ID", responses = {
+    @Operation(summary = "Update a ticket by ID", responses = {
             @ApiResponse(
                     responseCode = "200",
                     description = "Ticket updated successfully",
@@ -93,6 +94,24 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.OK).body(savedTicket);
     }
 
+    @Operation(summary = "Delete a ticket by ID", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Ticket deleted successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Void.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Ticket not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = NotFoundException.class)
+                    )
+            )
+    })
     @DeleteMapping("/cancel-ticket/{id}")
     public ResponseEntity<Void> deleteTicketById(@PathVariable("id") String id){
 

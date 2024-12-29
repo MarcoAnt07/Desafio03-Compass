@@ -52,7 +52,17 @@ public class TicketController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedTicket);
     }
-    
+
+    @Operation(summary = "Get ticket by ID", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Ticket details",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = TicketResponseDTO.class)
+                    )
+            )
+    })
     @GetMapping("/get-ticket/{id}")
     public ResponseEntity<TicketResponseDTO> getTicketById(@PathVariable("id") String id){
         Ticket ticket = ticketRepository.findTicketById(id);

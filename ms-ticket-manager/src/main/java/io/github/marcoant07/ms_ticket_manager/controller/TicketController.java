@@ -5,8 +5,13 @@ import io.github.marcoant07.ms_ticket_manager.dto.TicketResponseDTO;
 import io.github.marcoant07.ms_ticket_manager.dto.mapper.Mapper;
 import io.github.marcoant07.ms_ticket_manager.entity.Event;
 import io.github.marcoant07.ms_ticket_manager.entity.Ticket;
+import io.github.marcoant07.ms_ticket_manager.exception.NotFoundException;
 import io.github.marcoant07.ms_ticket_manager.repository.TicketRepository;
 import io.github.marcoant07.ms_ticket_manager.services.EmailService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +30,16 @@ public class TicketController {
     @Autowired
     private EmailService emailService;
 
+    @Operation(summary = "Create a new ticket", responses = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Ticket created successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Ticket.class)
+                    )
+            )
+    })
     @PostMapping("/create-ticket")
     public ResponseEntity<Ticket> createTicket(@RequestBody TicketDTO ticketDTO){
 
@@ -39,6 +54,16 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedTicket);
     }
 
+    @Operation(summary = "Get ticket by ID", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Ticket details",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = TicketResponseDTO.class)
+                    )
+            )
+    })
     @GetMapping("/get-ticket/{id}")
     public ResponseEntity<TicketResponseDTO> getTicketById(@PathVariable("id") String id){
         Ticket ticket = ticketRepository.findTicketById(id);
@@ -46,6 +71,16 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.OK).body(Mapper.toTicketResponseDTO(ticket));
     }
 
+    @Operation(summary = "Update a ticket by ID", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Ticket updated successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Ticket.class)
+                    )
+            )
+    })
     @PutMapping("/update-ticket/{id}")
     public ResponseEntity<Ticket> updateTicketById(@PathVariable("id") String id, @RequestBody TicketDTO ticketDTO){
 
@@ -59,6 +94,24 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.OK).body(savedTicket);
     }
 
+    @Operation(summary = "Delete a ticket by ID", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Ticket deleted successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Void.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Ticket not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = NotFoundException.class)
+                    )
+            )
+    })
     @DeleteMapping("/cancel-ticket/{id}")
     public ResponseEntity<Void> deleteTicketById(@PathVariable("id") String id){
 
@@ -76,7 +129,7 @@ public class TicketController {
 
     private Event fetchEventById(String eventId){
 
-        String url = "http://localhost:8081/event/get-event/" + eventId;
+        String url = "http://localhost:8080/event/get-event/" + eventId;
         RestTemplate restTemplate = new RestTemplate();
 
         try{

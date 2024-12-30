@@ -131,6 +131,29 @@ public class EventControllerUnit {
     }
 
     @Test
+    void updateEvent_WithAssociatedTicket_ReturnStatus409(){
+        String eventId = "676b04511797cb53fe6a00b5";
+        EventDTO eventDTO = new EventDTO("Updated Event", LocalDateTime.parse("2024-12-30T12:00:00"), "60326-515");
+        Event existingEvent = new Event("676b04511797cb53fe6a00b5", "Cc", LocalDateTime.parse("2024-12-30T21:00:00"), "60311-310", "Rua Santa Inês", "Pirambu", "Fortaleza", "CE");
+        Event updatedEvent = new Event("676b04511797cb53fe6a00b5", "Updated Event", LocalDateTime.parse("2024-12-30T12:00:00"), "60326-515", "Avenida Sargento Hermínio Sampaio", "Monte Castelo", "Fortaleza", "CE");
+
+        Ticket ticket = new Ticket("1B", "Aa", "000.000.000-00", "Aa@aa.com", "676b04511797cb53fe6a00b5", 600.0, 100.0, false);
+
+        ParameterizedTypeReference<List<Ticket>> typeReference = new ParameterizedTypeReference<>() {};
+
+        Mockito.lenient().when(restTemplate.exchange(
+                Mockito.eq("http://localhost:8081/api/v1/check-tickets-by-event/" + eventId),
+                Mockito.eq(HttpMethod.GET),
+                Mockito.isNull(),
+                Mockito.eq(typeReference)
+        )).thenReturn(new ResponseEntity<>(List.of(ticket), HttpStatus.OK));
+
+        ResponseEntity<Event> response = eventController.updateEventById(eventId, eventDTO);
+
+        Assertions.assertThat(response.getStatusCode().value()).isEqualTo(409);
+    }
+
+    @Test
     void deleteEvent_ReturnStatus200(){
         String eventId = "1A";
         Event event = new Event("1A", "Cc", LocalDateTime.parse("2024-12-30T21:00:00"), "60311-310", "Rua Santa Inês", "Pirambu", "Fortaleza", "CE");
@@ -151,7 +174,6 @@ public class EventControllerUnit {
         Mockito.when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
 
         ParameterizedTypeReference<List<Ticket>> typeReference = new ParameterizedTypeReference<>() {};
-
 
         Mockito.lenient().when(restTemplate.exchange(
                 Mockito.eq("http://localhost:8081/api/v1/check-tickets-by-event/" + eventId),

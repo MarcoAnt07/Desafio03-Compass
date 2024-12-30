@@ -19,6 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("api/v1")
 @Slf4j
@@ -71,6 +74,39 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.OK).body(Mapper.toTicketResponseDTO(ticket));
     }
 
+    @Operation(summary = "Check tickets linked to an event", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Tickets linked to the event retrieved successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = TicketResponseDTO.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "No tickets found for this event",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = TicketResponseDTO.class)
+                    )
+            )
+    })
+    @GetMapping("/check-tickets-by-event/{eventId}")
+    public ResponseEntity<List<TicketDTO>> checkTicketsByEvent(@PathVariable("eventId") String eventId){
+        List<Ticket> ticketsEvents = ticketRepository.findTicketByEventId(eventId);
+
+        List<Ticket> filteredTickets = ticketsEvents.stream().filter(ticket -> ticket.getDeleted().equals(false)).collect(Collectors.toList());
+
+        List<TicketDTO> ticketDTOSList = Mapper.toListDTO(filteredTickets);
+
+        if(ticketDTOSList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(ticketDTOSList);
+    }
+
     @Operation(summary = "Update a ticket by ID", responses = {
             @ApiResponse(
                     responseCode = "200",
@@ -113,7 +149,7 @@ public class TicketController {
             )
     })
     @DeleteMapping("/cancel-ticket/{id}")
-    public ResponseEntity<Void> deleteTicketById(@PathVariable("id") String id){
+    public ResponseEntity<Ticket> deleteTicketById(@PathVariable("id") String id){
 
         Ticket ticket = ticketRepository.findActiveTicketById(id);
 
@@ -124,12 +160,12 @@ public class TicketController {
         ticket.setDeleted(true);
         ticketRepository.save(ticket);
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(ticket);
     }
 
     private Event fetchEventById(String eventId){
 
-        String url = "http://localhost:8080/event/get-event/" + eventId;
+        String url = "http://localhost:8080/api/v1/get-event/" + eventId;
         RestTemplate restTemplate = new RestTemplate();
 
         try{

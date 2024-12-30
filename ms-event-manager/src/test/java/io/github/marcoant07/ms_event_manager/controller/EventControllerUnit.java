@@ -4,6 +4,7 @@ import io.github.marcoant07.ms_event_manager.dto.EventDTO;
 import io.github.marcoant07.ms_event_manager.dto.GetEventDTO;
 import io.github.marcoant07.ms_event_manager.dto.mapper.Mapper;
 import io.github.marcoant07.ms_event_manager.entity.Event;
+import io.github.marcoant07.ms_event_manager.entity.Ticket;
 import io.github.marcoant07.ms_event_manager.repository.EventRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -13,9 +14,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,6 +35,9 @@ public class EventControllerUnit {
 
     @Mock
     private EventRepository eventRepository;
+
+    @Mock
+    private RestTemplate restTemplate;
 
     @Test
     void createEvent_WithValidData_ReturnEvent(){
@@ -132,5 +140,28 @@ public class EventControllerUnit {
         ResponseEntity<Void> response = eventController.deletePostById(eventId);
 
         Assertions.assertThat(response.getStatusCode().value()).isEqualTo(200);
+    }
+
+    @Test
+    void deleteEvent_WithAssociatedTicket_ReturnStatus409(){
+        String eventId = "676b04511797cb53fe6a00b5";
+        Event event = new Event("676b04511797cb53fe6a00b5", "Cc", LocalDateTime.parse("2024-12-30T21:00:00"), "60311-310", "Rua Santa Inês", "Pirambu", "Fortaleza", "CE");
+        Ticket ticket = new Ticket("1B", "Aa", "000.000.000-00", "Aa@aa.com", "676b04511797cb53fe6a00b5", 600.0, 100.0, false);
+
+        Mockito.when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
+
+        ParameterizedTypeReference<List<Ticket>> typeReference = new ParameterizedTypeReference<>() {};
+
+
+        Mockito.lenient().when(restTemplate.exchange(
+                Mockito.eq("http://localhost:8081/api/v1/check-tickets-by-event/" + eventId),
+                Mockito.eq(HttpMethod.GET),
+                Mockito.isNull(),
+                Mockito.eq(typeReference)
+        )).thenReturn(new ResponseEntity<>(List.of(ticket), HttpStatus.OK));
+
+        ResponseEntity<Void> response = eventController.deletePostById(eventId);
+
+        Assertions.assertThat(response.getStatusCode().value()).isEqualTo(409);
     }
 }

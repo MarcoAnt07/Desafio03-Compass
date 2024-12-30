@@ -110,7 +110,7 @@ public class EventControllerUnit {
         Event updatedEvent = new Event("1A", "Updated Event", LocalDateTime.parse("2024-12-30T12:00:00"), "60326-515", "Avenida Sargento Hermínio Sampaio", "Monte Castelo", "Fortaleza", "CE");
 
         Mockito.when(eventRepository.findById(eventId)).thenReturn(Optional.of(existingEvent));
-        Mockito.when(eventRepository.save(Mockito.any(Event.class))).thenReturn(Mapper.toEvent(eventDTO));
+        Mockito.when(eventRepository.save(Mockito.any(Event.class))).thenReturn(updatedEvent);
 
         ResponseEntity<Event> response = eventController.updateEventById(eventId, eventDTO);
 

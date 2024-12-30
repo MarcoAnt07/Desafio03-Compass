@@ -135,26 +135,39 @@ public class EventController {
     @PutMapping("/update-event/{id}")
     public ResponseEntity<Event> updateEventById(@PathVariable("id") String id, @RequestBody EventDTO eventDTO){
 
-        Event event = eventRepository.findById(id).orElseThrow(
-                NotFoundException::new
-        );
-
-        String url = "https://viacep.com.br/ws/" + eventDTO.getCep() + "/json/";
+        String urlGet = "http://localhost:8081/api/v1/check-tickets-by-event/" + id;
         RestTemplate restTemplate = new RestTemplate();
-        Address address = restTemplate.getForObject(url, Address.class);
 
-        event.setEventName(eventDTO.getNameEvent());
-        event.setDateTime(eventDTO.getDateTime());
-        event.setCep(eventDTO.getCep());
-        event.setLogradouro(address.getLogradouro());
-        event.setBairro(address.getBairro());
-        event.setCidade(address.getLocalidade());
-        event.setUf(address.getUf());
+        List<Ticket> ticketList;
 
-        Event savedEvent = eventRepository.save(event);
+        try{
+            ticketList = restTemplate.exchange(urlGet, HttpMethod.GET, null, new ParameterizedTypeReference<List<Ticket>>() {}).getBody();
+        } catch (HttpClientErrorException.NotFound e){
+            ticketList = Collections.emptyList();
+        }
 
-        return ResponseEntity.ok(savedEvent);
+        if (ticketList.isEmpty()){
+            Event event = eventRepository.findById(id).orElseThrow(
+                    NotFoundException::new
+            );
 
+            String urlViaCep = "https://viacep.com.br/ws/" + eventDTO.getCep() + "/json/";
+            Address address = restTemplate.getForObject(urlViaCep, Address.class);
+
+            event.setEventName(eventDTO.getNameEvent());
+            event.setDateTime(eventDTO.getDateTime());
+            event.setCep(eventDTO.getCep());
+            event.setLogradouro(address.getLogradouro());
+            event.setBairro(address.getBairro());
+            event.setCidade(address.getLocalidade());
+            event.setUf(address.getUf());
+
+            Event savedEvent = eventRepository.save(event);
+
+            return ResponseEntity.ok(savedEvent);
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 
     @Operation(summary = "Delete an event by ID", responses = {
@@ -206,8 +219,7 @@ public class EventController {
             eventRepository.deleteById(id);
 
             return ResponseEntity.status(HttpStatus.OK).build();
-        }
-        else {
+        } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }

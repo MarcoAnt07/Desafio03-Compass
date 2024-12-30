@@ -74,6 +74,24 @@ public class TicketController {
         return ResponseEntity.status(HttpStatus.OK).body(Mapper.toTicketResponseDTO(ticket));
     }
 
+    @Operation(summary = "Check tickets linked to an event", responses = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Tickets linked to the event retrieved successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = TicketResponseDTO.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "No tickets found for this event",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = TicketResponseDTO.class)
+                    )
+            )
+    })
     @GetMapping("/check-tickets-by-event/{eventId}")
     public ResponseEntity<List<TicketDTO>> checkTicketsByEvent(@PathVariable("eventId") String eventId){
         List<Ticket> ticketsEvents = ticketRepository.findTicketByEventId(eventId);

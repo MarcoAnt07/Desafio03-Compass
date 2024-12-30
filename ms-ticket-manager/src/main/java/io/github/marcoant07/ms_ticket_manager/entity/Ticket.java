@@ -34,6 +34,17 @@ public class Ticket {
         this.USDamount = USDamount;
     }
 
+    public Ticket(String id, String costumerName, String cpf, String custumerMail, Event event, Double BRLamount, Double USDamount, Boolean deleted) {
+        this.id = id;
+        this.costumerName = costumerName;
+        this.cpf = cpf;
+        this.custumerMail = custumerMail;
+        this.event = event;
+        this.BRLamount = BRLamount;
+        this.USDamount = USDamount;
+        this.deleted = deleted;
+    }
+
     public String getId() {
         return id;
     }

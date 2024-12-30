@@ -27,6 +27,27 @@ public class TicketDTO {
         this.USDamount = USDamount;
     }
 
+    public TicketDTO(String id, String costumerName, String cpf, String custumerMail, String eventId, Double BRLamount, Double USDamount, Boolean deleted) {
+        this.id = id;
+        this.costumerName = costumerName;
+        this.cpf = cpf;
+        this.custumerMail = custumerMail;
+        this.eventId = eventId;
+        this.BRLamount = BRLamount;
+        this.USDamount = USDamount;
+        this.deleted = deleted;
+    }
+
+    public TicketDTO(String id, String costumerName, String cpf, String eventId, String custumerMail, Double BRLamount, Double USDamount) {
+        this.id = id;
+        this.costumerName = costumerName;
+        this.cpf = cpf;
+        this.eventId = eventId;
+        this.custumerMail = custumerMail;
+        this.BRLamount = BRLamount;
+        this.USDamount = USDamount;
+    }
+
     public String getId() {
         return id;
     }

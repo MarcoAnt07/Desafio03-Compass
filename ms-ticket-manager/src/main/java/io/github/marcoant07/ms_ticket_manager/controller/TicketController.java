@@ -82,6 +82,10 @@ public class TicketController {
 
         List<TicketDTO> ticketDTOSList = Mapper.toListDTO(filteredTickets);
 
+        if(ticketDTOSList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
         return ResponseEntity.status(HttpStatus.OK).body(ticketDTOSList);
     }
 

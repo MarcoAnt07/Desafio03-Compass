@@ -15,6 +15,15 @@ public class EventDTO {
     private LocalDateTime dateTime;
     private String cep;
 
+    public EventDTO() {
+    }
+
+    public EventDTO(String nameEvent, LocalDateTime dateTime, String cep) {
+        this.nameEvent = nameEvent;
+        this.dateTime = dateTime;
+        this.cep = cep;
+    }
+
     public String getNameEvent() {
         return nameEvent;
     }

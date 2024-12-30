@@ -8,7 +8,9 @@ import io.github.marcoant07.ms_ticket_manager.entity.Event;
 import io.github.marcoant07.ms_ticket_manager.entity.Ticket;
 import org.modelmapper.ModelMapper;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Mapper {
 
@@ -45,5 +47,10 @@ public class Mapper {
 
     public static TicketResponseDTO toTicketResponseDTO(Ticket ticket){
         return new ModelMapper().map(ticket, TicketResponseDTO.class);
+    }
+
+
+    public static List<TicketDTO> toListDTO(List<Ticket> ticketsList){
+        return ticketsList.stream().map(Mapper::toTicketDTO).collect(Collectors.toList());
     }
 }

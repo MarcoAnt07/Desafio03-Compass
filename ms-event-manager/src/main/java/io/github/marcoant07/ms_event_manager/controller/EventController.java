@@ -5,6 +5,7 @@ import io.github.marcoant07.ms_event_manager.dto.EventDTO;
 import io.github.marcoant07.ms_event_manager.dto.GetEventDTO;
 import io.github.marcoant07.ms_event_manager.dto.mapper.Mapper;
 import io.github.marcoant07.ms_event_manager.entity.Event;
+import io.github.marcoant07.ms_event_manager.entity.Ticket;
 import io.github.marcoant07.ms_event_manager.exception.NotFoundException;
 import io.github.marcoant07.ms_event_manager.repository.EventRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,12 +13,16 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -181,12 +186,29 @@ public class EventController {
     @DeleteMapping("/delete-event/{id}")
     public ResponseEntity<Void> deletePostById(@PathVariable String id){
 
+        String url = "http://localhost:8081/api/v1/check-tickets-by-event/" + id;
+        RestTemplate restTemplate = new RestTemplate();
+
+        List<Ticket> ticketList;
+
+        try{
+            ticketList = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<Ticket>>() {}).getBody();
+        } catch (HttpClientErrorException.NotFound e){
+            ticketList = Collections.emptyList();
+        }
+
+
         Event event = eventRepository.findById(id).orElseThrow(
                 NotFoundException::new
         );
 
-        eventRepository.deleteById(id);
+        if (ticketList.isEmpty()){
+            eventRepository.deleteById(id);
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 }

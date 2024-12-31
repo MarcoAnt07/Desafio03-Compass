@@ -89,4 +89,18 @@ public class TicketControlletUnit {
         Assertions.assertThat(response.getBody().get(0).getCostumerName()).isEqualTo("Aa");
         Assertions.assertThat(response.getBody().get(1).getCustumerMail()).isEqualTo("bb@bb.com");
     }
+
+    @Test
+    void checkTicketsByEvent_ReturnStatus404(){
+        Event event = new Event("676d9722107c4a0ccd7f5af8", "Cc", LocalDateTime.parse("2024-12-31T00:00:00"), "60311-310", "Rua Santa Inês", "Pirambu", "Fortaleza", "CE");
+
+        Mockito.when(ticketRepository.findTicketByEventId(event.getId())).thenReturn(List.of());
+
+        ResponseEntity<List<TicketDTO>> response = ticketController.checkTicketsByEvent(event.getId());
+
+        System.out.println(response);
+
+        Assertions.assertThat(response.getStatusCode().value()).isEqualTo(404);
+        Assertions.assertThat(response.getBody()).isNull();
+    }
 }

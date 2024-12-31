@@ -113,6 +113,18 @@ public class EventControllerUnit {
     }
 
     @Test
+    void getEventById_ReturnStatus404(){
+        String eventId = "1A";
+
+        Mockito.when(eventRepository.findById(Mockito.any(String.class))).thenReturn(Optional.empty());
+
+        NotFoundException notFoundException = Assertions.catchThrowableOfType(() -> eventController.getById(eventId), NotFoundException.class);
+
+        Assertions.assertThat(notFoundException).isNotNull();
+        Assertions.assertThat(notFoundException.getMessage()).isEqualTo("Event not found");
+    }
+
+    @Test
     void updateEvent_ReturnEvent(){
         String eventId = "1A";
         EventDTO eventDTO = new EventDTO("Updated Event", LocalDateTime.parse("2024-12-30T12:00:00"), "60326-515");

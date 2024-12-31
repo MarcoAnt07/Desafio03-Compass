@@ -5,6 +5,7 @@ import io.github.marcoant07.ms_ticket_manager.dto.TicketResponseDTO;
 import io.github.marcoant07.ms_ticket_manager.dto.mapper.Mapper;
 import io.github.marcoant07.ms_ticket_manager.entity.Event;
 import io.github.marcoant07.ms_ticket_manager.entity.Ticket;
+import io.github.marcoant07.ms_ticket_manager.exception.throwable.NotFoundException;
 import io.github.marcoant07.ms_ticket_manager.repository.TicketRepository;
 import io.github.marcoant07.ms_ticket_manager.services.EmailService;
 import org.assertj.core.api.Assertions;
@@ -96,12 +97,10 @@ public class TicketControlletUnit {
 
         Mockito.when(ticketRepository.findTicketByEventId(event.getId())).thenReturn(List.of());
 
-        ResponseEntity<List<TicketDTO>> response = ticketController.checkTicketsByEvent(event.getId());
+        NotFoundException notFoundException = Assertions.catchThrowableOfType( () -> ticketController.checkTicketsByEvent(event.getId()), NotFoundException.class);
 
-        System.out.println(response);
-
-        Assertions.assertThat(response.getStatusCode().value()).isEqualTo(404);
-        Assertions.assertThat(response.getBody()).isNull();
+        Assertions.assertThat(notFoundException).isNotNull();
+        Assertions.assertThat(notFoundException.getMessage()).isEqualTo("No tickets found for this event");
     }
 
     @Test
@@ -140,10 +139,9 @@ public class TicketControlletUnit {
 
         Mockito.when(ticketRepository.findActiveTicketById(ticketId)).thenReturn(null);
 
-        ResponseEntity<Ticket> response = ticketController.deleteTicketById(ticketId);
+        NotFoundException notFoundException = Assertions.catchThrowableOfType( () -> ticketController.deleteTicketById(ticketId), NotFoundException.class);
 
-        Assertions.assertThat(response.getStatusCode().value()).isEqualTo(404);
-        Assertions.assertThat(response.getBody()).isNull();
-        Mockito.verify(ticketRepository, Mockito.never()).save(Mockito.any(Ticket.class));
+        Assertions.assertThat(notFoundException).isNotNull();
+        Assertions.assertThat(notFoundException.getMessage()).isEqualTo("Ticket not found with id: " + ticketId);
     }
 }

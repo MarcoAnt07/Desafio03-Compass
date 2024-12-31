@@ -130,14 +130,6 @@ public class TicketController {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Ticket not found",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = NotFoundException.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "404",
                     description = "Event not found",
                     content = @Content(
                             mediaType = "application/json",
@@ -149,9 +141,6 @@ public class TicketController {
     public ResponseEntity<Ticket> updateTicketById(@PathVariable("id") String id, @RequestBody TicketDTO ticketDTO){
 
         Ticket ticket = ticketRepository.findActiveTicketById(id);
-        if (ticket == null){
-            throw new NotFoundException("Ticket not found with id: " + id);
-        }
 
         Event event = fetchEventById(ticketDTO.getEventId());
         if (event == null){

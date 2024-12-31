@@ -5,7 +5,7 @@ import io.github.marcoant07.ms_ticket_manager.dto.TicketResponseDTO;
 import io.github.marcoant07.ms_ticket_manager.dto.mapper.Mapper;
 import io.github.marcoant07.ms_ticket_manager.entity.Event;
 import io.github.marcoant07.ms_ticket_manager.entity.Ticket;
-import io.github.marcoant07.ms_ticket_manager.exception.NotFoundException;
+import io.github.marcoant07.ms_ticket_manager.exception.throwable.NotFoundException;
 import io.github.marcoant07.ms_ticket_manager.repository.TicketRepository;
 import io.github.marcoant07.ms_ticket_manager.services.EmailService;
 import io.swagger.v3.oas.annotations.Operation;

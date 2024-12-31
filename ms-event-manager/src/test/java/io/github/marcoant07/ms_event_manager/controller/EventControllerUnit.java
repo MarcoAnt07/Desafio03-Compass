@@ -5,6 +5,7 @@ import io.github.marcoant07.ms_event_manager.dto.GetEventDTO;
 import io.github.marcoant07.ms_event_manager.dto.mapper.Mapper;
 import io.github.marcoant07.ms_event_manager.entity.Event;
 import io.github.marcoant07.ms_event_manager.entity.Ticket;
+import io.github.marcoant07.ms_event_manager.exception.throwable.ConflictException;
 import io.github.marcoant07.ms_event_manager.repository.EventRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -148,9 +149,10 @@ public class EventControllerUnit {
                 Mockito.eq(typeReference)
         )).thenReturn(new ResponseEntity<>(List.of(ticket), HttpStatus.OK));
 
-        ResponseEntity<Event> response = eventController.updateEventById(eventId, eventDTO);
+        ConflictException thrown = Assertions.catchThrowableOfType( () -> eventController.updateEventById(eventId, eventDTO), ConflictException.class);
 
-        Assertions.assertThat(response.getStatusCode().value()).isEqualTo(409);
+        Assertions.assertThat(thrown.getMessage()).isEqualTo("There are tickets registered for this event");
+        Assertions.assertThat(thrown).isNotNull();
     }
 
     @Test
@@ -182,8 +184,9 @@ public class EventControllerUnit {
                 Mockito.eq(typeReference)
         )).thenReturn(new ResponseEntity<>(List.of(ticket), HttpStatus.OK));
 
-        ResponseEntity<Void> response = eventController.deletePostById(eventId);
+        ConflictException thrown = Assertions.catchThrowableOfType( () -> eventController.deletePostById(eventId), ConflictException.class);
 
-        Assertions.assertThat(response.getStatusCode().value()).isEqualTo(409);
+        Assertions.assertThat(thrown).isNotNull();
+        Assertions.assertThat(thrown.getMessage()).isEqualTo("Conflict - Tickets linked to this event");
     }
 }

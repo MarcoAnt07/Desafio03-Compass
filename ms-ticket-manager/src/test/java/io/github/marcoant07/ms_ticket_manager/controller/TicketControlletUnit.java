@@ -133,4 +133,17 @@ public class TicketControlletUnit {
         Assertions.assertThat(response.getBody().getDeleted()).isTrue();
         Mockito.verify(ticketRepository).save(Mockito.any(Ticket.class));
     }
+
+    @Test
+    void deleteTicket_ReturnStatus404(){
+        String ticketId = "1A";
+
+        Mockito.when(ticketRepository.findActiveTicketById(ticketId)).thenReturn(null);
+
+        ResponseEntity<Ticket> response = ticketController.deleteTicketById(ticketId);
+
+        Assertions.assertThat(response.getStatusCode().value()).isEqualTo(404);
+        Assertions.assertThat(response.getBody()).isNull();
+        Mockito.verify(ticketRepository, Mockito.never()).save(Mockito.any(Ticket.class));
+    }
 }

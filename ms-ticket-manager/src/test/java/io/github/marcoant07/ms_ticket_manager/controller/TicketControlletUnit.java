@@ -1,6 +1,7 @@
 package io.github.marcoant07.ms_ticket_manager.controller;
 
 import io.github.marcoant07.ms_ticket_manager.dto.TicketDTO;
+import io.github.marcoant07.ms_ticket_manager.dto.TicketResponseDTO;
 import io.github.marcoant07.ms_ticket_manager.dto.mapper.Mapper;
 import io.github.marcoant07.ms_ticket_manager.entity.Event;
 import io.github.marcoant07.ms_ticket_manager.entity.Ticket;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class TicketControlletUnit {
@@ -46,5 +48,21 @@ public class TicketControlletUnit {
         Assertions.assertThat(response.getStatusCode().value()).isEqualTo(201);
         Assertions.assertThat(response.getBody()).isNotNull();
         Mockito.verify(emailService, Mockito.times(1)).sendEmail(Mockito.any(Ticket.class));
+    }
+
+    @Test
+    void getTicketById_ReturnTicket(){
+        String ticketId = "1A";
+        Event event = new Event("676b04511797cb53fe6a00b5", "Cc", LocalDateTime.parse("2024-12-31T00:00:00"), "60311-310", "Rua Santa Inês", "Pirambu", "Fortaleza", "CE");
+        Ticket ticket = new Ticket(ticketId, "Aa", "000.000.000-00", "aa@aa.com", event, 600.0, 100.0, false);
+
+        Mockito.when(ticketRepository.findTicketById(Mockito.anyString())).thenReturn(ticket);
+
+        ResponseEntity<TicketResponseDTO> response = ticketController.getTicketById(ticketId);
+
+        Assertions.assertThat(response.getStatusCode().value()).isEqualTo(200);
+        Assertions.assertThat(response.getBody()).isNotNull();
+        Assertions.assertThat(response.getBody().getEvent()).isEqualTo(event);
+        Assertions.assertThat(response.getBody().getCostumerName()).isEqualTo(ticket.getCostumerName());
     }
 }

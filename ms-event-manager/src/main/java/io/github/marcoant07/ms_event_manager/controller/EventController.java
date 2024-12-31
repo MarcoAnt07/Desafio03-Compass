@@ -103,6 +103,14 @@ public class EventController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = GetEventDTO.class)
                     )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Event not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Event.class)
+                    )
             )
     })
     @GetMapping("/get-event/{id}")
@@ -119,6 +127,14 @@ public class EventController {
             @ApiResponse(
                     responseCode = "200",
                     description = "Event updated successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Event.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Event not found",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = Event.class)

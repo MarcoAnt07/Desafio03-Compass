@@ -5,6 +5,8 @@ import io.github.marcoant07.ms_event_manager.dto.GetEventDTO;
 import io.github.marcoant07.ms_event_manager.dto.mapper.Mapper;
 import io.github.marcoant07.ms_event_manager.entity.Event;
 import io.github.marcoant07.ms_event_manager.entity.Ticket;
+import io.github.marcoant07.ms_event_manager.exception.throwable.ConflictException;
+import io.github.marcoant07.ms_event_manager.exception.throwable.NotFoundException;
 import io.github.marcoant07.ms_event_manager.repository.EventRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -111,6 +113,18 @@ public class EventControllerUnit {
     }
 
     @Test
+    void getEventById_ReturnStatus404(){
+        String eventId = "1A";
+
+        Mockito.when(eventRepository.findById(Mockito.any(String.class))).thenReturn(Optional.empty());
+
+        NotFoundException notFoundException = Assertions.catchThrowableOfType(() -> eventController.getById(eventId), NotFoundException.class);
+
+        Assertions.assertThat(notFoundException).isNotNull();
+        Assertions.assertThat(notFoundException.getMessage()).isEqualTo("Event not found");
+    }
+
+    @Test
     void updateEvent_ReturnEvent(){
         String eventId = "1A";
         EventDTO eventDTO = new EventDTO("Updated Event", LocalDateTime.parse("2024-12-30T12:00:00"), "60326-515");
@@ -148,9 +162,23 @@ public class EventControllerUnit {
                 Mockito.eq(typeReference)
         )).thenReturn(new ResponseEntity<>(List.of(ticket), HttpStatus.OK));
 
-        ResponseEntity<Event> response = eventController.updateEventById(eventId, eventDTO);
+        ConflictException conflictException = Assertions.catchThrowableOfType( () -> eventController.updateEventById(eventId, eventDTO), ConflictException.class);
 
-        Assertions.assertThat(response.getStatusCode().value()).isEqualTo(409);
+        Assertions.assertThat(conflictException.getMessage()).isEqualTo("There are tickets registered for this event");
+        Assertions.assertThat(conflictException).isNotNull();
+    }
+
+    @Test
+    void updateEvent_ReturnStatus404(){
+        String eventId = "676b04511797cb53fe6a0000";
+        EventDTO eventDTO = new EventDTO("Updated Event", LocalDateTime.parse("2024-12-30T12:00:00"), "60326-515");
+
+        Mockito.when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
+
+        NotFoundException notFoundException = Assertions.catchThrowableOfType(() -> eventController.updateEventById(eventId, eventDTO), NotFoundException.class);
+
+        Assertions.assertThat(notFoundException).isNotNull();
+        Assertions.assertThat(notFoundException.getMessage()).isEqualTo("Entity not found");
     }
 
     @Test
@@ -182,8 +210,9 @@ public class EventControllerUnit {
                 Mockito.eq(typeReference)
         )).thenReturn(new ResponseEntity<>(List.of(ticket), HttpStatus.OK));
 
-        ResponseEntity<Void> response = eventController.deletePostById(eventId);
+        ConflictException conflictException = Assertions.catchThrowableOfType( () -> eventController.deletePostById(eventId), ConflictException.class);
 
-        Assertions.assertThat(response.getStatusCode().value()).isEqualTo(409);
+        Assertions.assertThat(conflictException).isNotNull();
+        Assertions.assertThat(conflictException.getMessage()).isEqualTo("Conflict - Tickets linked to this event");
     }
 }

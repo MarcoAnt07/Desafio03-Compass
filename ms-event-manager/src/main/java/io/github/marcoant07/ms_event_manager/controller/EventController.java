@@ -167,7 +167,7 @@ public class EventController {
 
             return ResponseEntity.ok(savedEvent);
         } else {
-            throw new ConflictException();
+            throw new ConflictException("There are tickets registered for this event");
         }
     }
 
@@ -221,7 +221,7 @@ public class EventController {
 
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            throw new ConflictException("Conflict - Tickets linked to this event");
         }
     }
 }

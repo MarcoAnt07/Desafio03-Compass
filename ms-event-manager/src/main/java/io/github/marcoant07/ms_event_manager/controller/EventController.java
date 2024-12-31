@@ -109,7 +109,7 @@ public class EventController {
                     description = "Event not found",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = Event.class)
+                            schema = @Schema(implementation = NotFoundException.class)
                     )
             )
     })
@@ -137,7 +137,7 @@ public class EventController {
                     description = "Event not found",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = Event.class)
+                            schema = @Schema(implementation = NotFoundException.class)
                     )
             ),
             @ApiResponse(
@@ -145,7 +145,7 @@ public class EventController {
                     description = "Conflict - Tickets linked to this event",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = Event.class)
+                            schema = @Schema(implementation = ConflictException.class)
                     )
             )
     })
@@ -209,7 +209,7 @@ public class EventController {
                     description = "Conflict - Tickets linked to this event",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = Void.class)
+                            schema = @Schema(implementation = ConflictException.class)
                     )
             )
     })

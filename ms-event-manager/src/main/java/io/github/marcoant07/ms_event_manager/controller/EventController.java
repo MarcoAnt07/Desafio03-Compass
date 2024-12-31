@@ -6,7 +6,8 @@ import io.github.marcoant07.ms_event_manager.dto.GetEventDTO;
 import io.github.marcoant07.ms_event_manager.dto.mapper.Mapper;
 import io.github.marcoant07.ms_event_manager.entity.Event;
 import io.github.marcoant07.ms_event_manager.entity.Ticket;
-import io.github.marcoant07.ms_event_manager.exception.NotFoundException;
+import io.github.marcoant07.ms_event_manager.exception.throwable.ConflictException;
+import io.github.marcoant07.ms_event_manager.exception.throwable.NotFoundException;
 import io.github.marcoant07.ms_event_manager.repository.EventRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -166,7 +167,7 @@ public class EventController {
 
             return ResponseEntity.ok(savedEvent);
         } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            throw new ConflictException("There are tickets registered for this event");
         }
     }
 
@@ -220,7 +221,7 @@ public class EventController {
 
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            throw new ConflictException("Conflict - Tickets linked to this event");
         }
     }
 }

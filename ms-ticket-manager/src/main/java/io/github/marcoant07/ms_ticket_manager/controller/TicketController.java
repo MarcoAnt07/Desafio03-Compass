@@ -5,7 +5,7 @@ import io.github.marcoant07.ms_ticket_manager.dto.TicketResponseDTO;
 import io.github.marcoant07.ms_ticket_manager.dto.mapper.Mapper;
 import io.github.marcoant07.ms_ticket_manager.entity.Event;
 import io.github.marcoant07.ms_ticket_manager.entity.Ticket;
-import io.github.marcoant07.ms_ticket_manager.exception.NotFoundException;
+import io.github.marcoant07.ms_ticket_manager.exception.throwable.NotFoundException;
 import io.github.marcoant07.ms_ticket_manager.repository.TicketRepository;
 import io.github.marcoant07.ms_ticket_manager.services.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -65,11 +65,23 @@ public class TicketController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = TicketResponseDTO.class)
                     )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Ticket not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = NotFoundException.class)
+                    )
             )
     })
     @GetMapping("/get-ticket/{id}")
     public ResponseEntity<TicketResponseDTO> getTicketById(@PathVariable("id") String id){
         Ticket ticket = ticketRepository.findActiveTicketById(id);
+
+        if (ticket == null){
+            throw new NotFoundException("Ticket not found with id: " + id);
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body(Mapper.toTicketResponseDTO(ticket));
     }
@@ -88,7 +100,7 @@ public class TicketController {
                     description = "No tickets found for this event",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = TicketResponseDTO.class)
+                            schema = @Schema(implementation = NotFoundException.class)
                     )
             )
     })
@@ -101,7 +113,7 @@ public class TicketController {
         List<TicketDTO> ticketDTOSList = Mapper.toListDTO(filteredTickets);
 
         if(ticketDTOSList.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new NotFoundException("No tickets found for this event");
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(ticketDTOSList);
@@ -115,13 +127,26 @@ public class TicketController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = Ticket.class)
                     )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Event not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = NotFoundException.class)
+                    )
             )
     })
     @PutMapping("/update-ticket/{id}")
     public ResponseEntity<Ticket> updateTicketById(@PathVariable("id") String id, @RequestBody TicketDTO ticketDTO){
 
         Ticket ticket = ticketRepository.findActiveTicketById(id);
+
         Event event = fetchEventById(ticketDTO.getEventId());
+        if (event == null){
+            throw new NotFoundException("Event not found with id: " + ticketDTO.getEventId());
+        }
+
         ticket = Mapper.toTicket(ticketDTO, event);
         Ticket savedTicket = ticketRepository.save(ticket);
 
@@ -154,7 +179,7 @@ public class TicketController {
         Ticket ticket = ticketRepository.findActiveTicketById(id);
 
         if(ticket == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new NotFoundException("Ticket not found with id: " + id);
         }
 
         ticket.setDeleted(true);

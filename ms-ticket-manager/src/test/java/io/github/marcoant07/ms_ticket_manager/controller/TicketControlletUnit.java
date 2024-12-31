@@ -103,4 +103,19 @@ public class TicketControlletUnit {
         Assertions.assertThat(response.getStatusCode().value()).isEqualTo(404);
         Assertions.assertThat(response.getBody()).isNull();
     }
+
+    @Test
+    void updateTicket_ReturnTicket(){
+        TicketDTO ticketDTO = new TicketDTO("1A", "Aa", "000.000.000-00", "676b04511797cb53fe6a00b5", "aa@aa.com", 600.0, 100.0);
+        Event event = new Event("676b04511797cb53fe6a00b5", "Cc", LocalDateTime.parse("2024-12-31T00:00:00"), "60311-310", "Rua Santa Inês", "Pirambu", "Fortaleza", "CE");
+        Ticket savedTicket = new Ticket("1A", "Aa", "000.000.000-00", "aa@aa.com", event, 600.0, 100.0, false);
+
+        Mockito.when(ticketRepository.save(Mockito.any(Ticket.class))).thenReturn(savedTicket);
+
+        ResponseEntity<Ticket> response = ticketController.updateTicketById("1A",ticketDTO);
+
+        Assertions.assertThat(response.getStatusCode().value()).isEqualTo(200);
+        Assertions.assertThat(response.getBody()).isNotNull();
+        Mockito.verify(emailService, Mockito.times(1)).sendEmailUpdate(Mockito.any(Ticket.class));
+    }
 }

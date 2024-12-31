@@ -118,4 +118,19 @@ public class TicketControlletUnit {
         Assertions.assertThat(response.getBody()).isNotNull();
         Mockito.verify(emailService, Mockito.times(1)).sendEmailUpdate(Mockito.any(Ticket.class));
     }
+
+    @Test
+    void deleteTicket_ReturnStatus200(){
+        String ticketId = "1A";
+        Event event = new Event("676d9722107c4a0ccd7f5af8", "Cc", LocalDateTime.parse("2024-12-31T00:00:00"), "60311-310", "Rua Santa Inês", "Pirambu", "Fortaleza", "CE");
+        Ticket ticket = new Ticket(ticketId, "Aa", "000.000.000-00", "aa@aa.com", event, 600.0, 100.0, false);
+
+        Mockito.when(ticketRepository.findActiveTicketById(ticketId)).thenReturn(ticket);
+
+        ResponseEntity<Ticket> response = ticketController.deleteTicketById(ticketId);
+
+        Assertions.assertThat(response.getStatusCode().value()).isEqualTo(200);
+        Assertions.assertThat(response.getBody().getDeleted()).isTrue();
+        Mockito.verify(ticketRepository).save(Mockito.any(Ticket.class));
+    }
 }

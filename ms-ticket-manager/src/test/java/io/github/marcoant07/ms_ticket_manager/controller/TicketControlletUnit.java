@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,7 +58,7 @@ public class TicketControlletUnit {
         Event event = new Event("676b04511797cb53fe6a00b5", "Cc", LocalDateTime.parse("2024-12-31T00:00:00"), "60311-310", "Rua Santa Inês", "Pirambu", "Fortaleza", "CE");
         Ticket ticket = new Ticket(ticketId, "Aa", "000.000.000-00", "aa@aa.com", event, 600.0, 100.0, false);
 
-        Mockito.when(ticketRepository.findTicketById(Mockito.anyString())).thenReturn(ticket);
+        Mockito.when(ticketRepository.findActiveTicketById(Mockito.anyString())).thenReturn(ticket);
 
         ResponseEntity<TicketResponseDTO> response = ticketController.getTicketById(ticketId);
 
@@ -64,5 +66,27 @@ public class TicketControlletUnit {
         Assertions.assertThat(response.getBody()).isNotNull();
         Assertions.assertThat(response.getBody().getEvent()).isEqualTo(event);
         Assertions.assertThat(response.getBody().getCostumerName()).isEqualTo(ticket.getCostumerName());
+    }
+
+    @Test
+    void checkTicketsByEvent_ReturnListOfTickets(){
+        Event event = new Event("676b04511797cb53fe6a00b5", "Cc", LocalDateTime.parse("2024-12-31T00:00:00"), "60311-310", "Rua Santa Inês", "Pirambu", "Fortaleza", "CE");
+
+        List<Ticket> listTickets = List.of(new Ticket("1A", "Aa", "000.000.000-00", "aa@aa.com", event, 600.0, 100.0, false),
+                                            new Ticket("2A", "Bb", "000.000.000-00", "bb@bb.com", event, 600.0, 100.0, false),
+                                            new Ticket("3A", "Aa", "000.000.000-00", "aa@aa.com", event, 600.0, 100.0, false));
+
+        Mockito.when(ticketRepository.findTicketByEventId(event.getId())).thenReturn(listTickets);
+
+        ResponseEntity<List<TicketDTO>> response = ticketController.checkTicketsByEvent(event.getId());
+
+        System.out.println(response);
+
+        Assertions.assertThat(response.getStatusCode().value()).isEqualTo(200);
+        Assertions.assertThat(response.getBody()).isNotNull();
+        Assertions.assertThat(response.getBody()).isNotEmpty();
+        Assertions.assertThat(response.getBody().size()).isEqualTo(listTickets.size());
+        Assertions.assertThat(response.getBody().get(0).getCostumerName()).isEqualTo("Aa");
+        Assertions.assertThat(response.getBody().get(1).getCustumerMail()).isEqualTo("bb@bb.com");
     }
 }

@@ -69,7 +69,7 @@ public class TicketController {
     })
     @GetMapping("/get-ticket/{id}")
     public ResponseEntity<TicketResponseDTO> getTicketById(@PathVariable("id") String id){
-        Ticket ticket = ticketRepository.findTicketById(id);
+        Ticket ticket = ticketRepository.findActiveTicketById(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(Mapper.toTicketResponseDTO(ticket));
     }
@@ -120,7 +120,7 @@ public class TicketController {
     @PutMapping("/update-ticket/{id}")
     public ResponseEntity<Ticket> updateTicketById(@PathVariable("id") String id, @RequestBody TicketDTO ticketDTO){
 
-        Ticket ticket = ticketRepository.findTicketById(id);
+        Ticket ticket = ticketRepository.findActiveTicketById(id);
         Event event = fetchEventById(ticketDTO.getEventId());
         ticket = Mapper.toTicket(ticketDTO, event);
         Ticket savedTicket = ticketRepository.save(ticket);

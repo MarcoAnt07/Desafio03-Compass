@@ -15,4 +15,4 @@ Os microsserviços são:
 ### Swagger
 Foi disponibilizada documentação da API com OpenAPI e Swagger. Para consulta, executar os passos para testes e execução e acessar:
 - API Event Manager: http://3.142.146.217:8080/swagger-ui/index.html  
-- API Ticket Manager: http://3.131.35.32:8081/swagger-ui/index.html  
+- API Ticket Manager: http://3.131.35.32:8080/swagger-ui/index.html  

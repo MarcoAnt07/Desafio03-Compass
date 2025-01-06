@@ -190,7 +190,7 @@ public class TicketController {
 
     private Event fetchEventById(String eventId){
 
-        String url = "http://localhost:8080/api/v1/get-event/" + eventId;
+        String url = "http://3.142.146.217:8080/api/v1/get-event/" + eventId;
         RestTemplate restTemplate = new RestTemplate();
 
         try{

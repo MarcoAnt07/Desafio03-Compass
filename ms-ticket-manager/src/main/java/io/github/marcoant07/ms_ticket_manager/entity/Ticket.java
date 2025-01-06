@@ -1,11 +1,9 @@
 package io.github.marcoant07.ms_ticket_manager.entity;
 
 import lombok.Data;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Document(collection = "db_ticket")
@@ -16,7 +14,7 @@ public class Ticket {
     private String id;
     private String costumerName;
     private String cpf;
-    private String custumerMail;
+    private String customerMail;
     private Event event;
     private Double BRLamount;
     private Double USDamount;
@@ -25,20 +23,20 @@ public class Ticket {
     public Ticket() {
     }
 
-    public Ticket(String costumerName, String cpf, String custumerMail, Event event, Double BRLamount, Double USDamount) {
+    public Ticket(String costumerName, String cpf, String customerMail, Event event, Double BRLamount, Double USDamount) {
         this.costumerName = costumerName;
         this.cpf = cpf;
-        this.custumerMail = custumerMail;
+        this.customerMail = customerMail;
         this.event = event;
         this.BRLamount = BRLamount;
         this.USDamount = USDamount;
     }
 
-    public Ticket(String id, String costumerName, String cpf, String custumerMail, Event event, Double BRLamount, Double USDamount, Boolean deleted) {
+    public Ticket(String id, String costumerName, String cpf, String customerMail, Event event, Double BRLamount, Double USDamount, Boolean deleted) {
         this.id = id;
         this.costumerName = costumerName;
         this.cpf = cpf;
-        this.custumerMail = custumerMail;
+        this.customerMail = customerMail;
         this.event = event;
         this.BRLamount = BRLamount;
         this.USDamount = USDamount;
@@ -77,12 +75,12 @@ public class Ticket {
         this.event = event;
     }
 
-    public String getCustumerMail() {
-        return custumerMail;
+    public String getCustomerMail() {
+        return customerMail;
     }
 
-    public void setCustumerMail(String custumerMail) {
-        this.custumerMail = custumerMail;
+    public void setCustomerMail(String customerMail) {
+        this.customerMail = customerMail;
     }
 
     public Double getBRLamount() {
@@ -114,11 +112,11 @@ public class Ticket {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ticket ticket = (Ticket) o;
-        return Objects.equals(id, ticket.id) && Objects.equals(costumerName, ticket.costumerName) && Objects.equals(cpf, ticket.cpf) && Objects.equals(custumerMail, ticket.custumerMail) && Objects.equals(event, ticket.event) && Objects.equals(BRLamount, ticket.BRLamount) && Objects.equals(USDamount, ticket.USDamount);
+        return Objects.equals(id, ticket.id) && Objects.equals(costumerName, ticket.costumerName) && Objects.equals(cpf, ticket.cpf) && Objects.equals(customerMail, ticket.customerMail) && Objects.equals(event, ticket.event) && Objects.equals(BRLamount, ticket.BRLamount) && Objects.equals(USDamount, ticket.USDamount);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, costumerName, cpf, custumerMail, event, BRLamount, USDamount);
+        return Objects.hash(id, costumerName, cpf, customerMail, event, BRLamount, USDamount);
     }
 }

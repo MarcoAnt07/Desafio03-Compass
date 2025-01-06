@@ -2,7 +2,6 @@ package io.github.marcoant07.ms_ticket_manager.controller;
 
 import io.github.marcoant07.ms_ticket_manager.dto.TicketDTO;
 import io.github.marcoant07.ms_ticket_manager.dto.TicketResponseDTO;
-import io.github.marcoant07.ms_ticket_manager.dto.mapper.Mapper;
 import io.github.marcoant07.ms_ticket_manager.entity.Event;
 import io.github.marcoant07.ms_ticket_manager.entity.Ticket;
 import io.github.marcoant07.ms_ticket_manager.exception.throwable.NotFoundException;
@@ -19,9 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class TicketControlletUnit {
@@ -88,7 +85,7 @@ public class TicketControlletUnit {
         Assertions.assertThat(response.getBody()).isNotEmpty();
         Assertions.assertThat(response.getBody().size()).isEqualTo(listTickets.size());
         Assertions.assertThat(response.getBody().get(0).getCostumerName()).isEqualTo("Aa");
-        Assertions.assertThat(response.getBody().get(1).getCustumerMail()).isEqualTo("bb@bb.com");
+        Assertions.assertThat(response.getBody().get(1).getCustomerMail()).isEqualTo("bb@bb.com");
     }
 
     @Test

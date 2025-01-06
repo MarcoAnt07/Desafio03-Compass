@@ -9,7 +9,7 @@ public class TicketResponseDTO {
     private String id;
     private String costumerName;
     private String cpf;
-    private String custumerMail;
+    private String customerMail;
     private Event event;
     private Double BRLamount;
     private Double USDamount;
@@ -18,7 +18,7 @@ public class TicketResponseDTO {
     public TicketResponseDTO(String costumerName, String cpf, String custumerMail, Event event, Double BRLamount, Double USDamount) {
         this.costumerName = costumerName;
         this.cpf = cpf;
-        this.custumerMail = custumerMail;
+        this.customerMail = custumerMail;
         this.event = event;
         this.BRLamount = BRLamount;
         this.USDamount = USDamount;
@@ -51,12 +51,12 @@ public class TicketResponseDTO {
         this.cpf = cpf;
     }
 
-    public String getCustumerMail() {
-        return custumerMail;
+    public String getCustomerMail() {
+        return customerMail;
     }
 
-    public void setCustumerMail(String custumerMail) {
-        this.custumerMail = custumerMail;
+    public void setCustomerMail(String customerMail) {
+        this.customerMail = customerMail;
     }
 
     public Event getEvent() {
@@ -96,11 +96,11 @@ public class TicketResponseDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TicketResponseDTO that = (TicketResponseDTO) o;
-        return Objects.equals(id, that.id) && Objects.equals(costumerName, that.costumerName) && Objects.equals(cpf, that.cpf) && Objects.equals(custumerMail, that.custumerMail) && Objects.equals(event, that.event) && Objects.equals(BRLamount, that.BRLamount) && Objects.equals(USDamount, that.USDamount);
+        return Objects.equals(id, that.id) && Objects.equals(costumerName, that.costumerName) && Objects.equals(cpf, that.cpf) && Objects.equals(customerMail, that.customerMail) && Objects.equals(event, that.event) && Objects.equals(BRLamount, that.BRLamount) && Objects.equals(USDamount, that.USDamount);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, costumerName, cpf, custumerMail, event, BRLamount, USDamount);
+        return Objects.hash(id, costumerName, cpf, customerMail, event, BRLamount, USDamount);
     }
 }

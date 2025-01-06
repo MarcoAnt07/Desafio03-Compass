@@ -9,7 +9,6 @@ import io.github.marcoant07.ms_ticket_manager.entity.Ticket;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Mapper {
@@ -33,7 +32,7 @@ public class Mapper {
         Ticket ticket = new Ticket();
         ticket.setCostumerName(ticketDTO.getCostumerName());
         ticket.setCpf(ticketDTO.getCpf());
-        ticket.setCustumerMail(ticketDTO.getCustumerMail());
+        ticket.setCustomerMail(ticketDTO.getCustomerMail());
         ticket.setEvent(event);
         ticket.setBRLamount(ticketDTO.getBRLamount());
         ticket.setUSDamount(ticketDTO.getUSDamount());

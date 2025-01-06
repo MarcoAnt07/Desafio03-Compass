@@ -9,7 +9,7 @@ public class TicketDTO {
     private String id;
     private String costumerName;
     private String cpf;
-    private String custumerMail;
+    private String customerMail;
     private String eventId;
     private Double BRLamount;
     private Double USDamount;
@@ -18,32 +18,32 @@ public class TicketDTO {
     public TicketDTO() {
     }
 
-    public TicketDTO(String costumerName, String cpf, String custumerMail, Event event, Double BRLamount, Double USDamount) {
+    public TicketDTO(String costumerName, String cpf, String customerMail, Event event, Double BRLamount, Double USDamount) {
         this.costumerName = costumerName;
         this.cpf = cpf;
-        this.custumerMail = custumerMail;
+        this.customerMail = customerMail;
         this.eventId = event.getId();
         this.BRLamount = BRLamount;
         this.USDamount = USDamount;
     }
 
-    public TicketDTO(String id, String costumerName, String cpf, String custumerMail, String eventId, Double BRLamount, Double USDamount, Boolean deleted) {
+    public TicketDTO(String id, String costumerName, String cpf, String customerMail, String eventId, Double BRLamount, Double USDamount, Boolean deleted) {
         this.id = id;
         this.costumerName = costumerName;
         this.cpf = cpf;
-        this.custumerMail = custumerMail;
+        this.customerMail = customerMail;
         this.eventId = eventId;
         this.BRLamount = BRLamount;
         this.USDamount = USDamount;
         this.deleted = deleted;
     }
 
-    public TicketDTO(String id, String costumerName, String cpf, String eventId, String custumerMail, Double BRLamount, Double USDamount) {
+    public TicketDTO(String id, String costumerName, String cpf, String eventId, String customerMail, Double BRLamount, Double USDamount) {
         this.id = id;
         this.costumerName = costumerName;
         this.cpf = cpf;
         this.eventId = eventId;
-        this.custumerMail = custumerMail;
+        this.customerMail = customerMail;
         this.BRLamount = BRLamount;
         this.USDamount = USDamount;
     }
@@ -72,12 +72,12 @@ public class TicketDTO {
         this.cpf = cpf;
     }
 
-    public String getCustumerMail() {
-        return custumerMail;
+    public String getCustomerMail() {
+        return customerMail;
     }
 
-    public void setCustumerMail(String custumerMail) {
-        this.custumerMail = custumerMail;
+    public void setCustomerMail(String customerMail) {
+        this.customerMail = customerMail;
     }
 
     public String getEventId() {
@@ -117,11 +117,11 @@ public class TicketDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TicketDTO ticketDTO = (TicketDTO) o;
-        return Objects.equals(id, ticketDTO.id) && Objects.equals(costumerName, ticketDTO.costumerName) && Objects.equals(cpf, ticketDTO.cpf) && Objects.equals(custumerMail, ticketDTO.custumerMail) && Objects.equals(eventId, ticketDTO.eventId) && Objects.equals(BRLamount, ticketDTO.BRLamount) && Objects.equals(USDamount, ticketDTO.USDamount) && Objects.equals(deleted, ticketDTO.deleted);
+        return Objects.equals(id, ticketDTO.id) && Objects.equals(costumerName, ticketDTO.costumerName) && Objects.equals(cpf, ticketDTO.cpf) && Objects.equals(customerMail, ticketDTO.customerMail) && Objects.equals(eventId, ticketDTO.eventId) && Objects.equals(BRLamount, ticketDTO.BRLamount) && Objects.equals(USDamount, ticketDTO.USDamount) && Objects.equals(deleted, ticketDTO.deleted);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, costumerName, cpf, custumerMail, eventId, BRLamount, USDamount, deleted);
+        return Objects.hash(id, costumerName, cpf, customerMail, eventId, BRLamount, USDamount, deleted);
     }
 }

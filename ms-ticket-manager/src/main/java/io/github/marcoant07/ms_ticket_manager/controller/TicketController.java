@@ -142,12 +142,22 @@ public class TicketController {
 
         Ticket ticket = ticketRepository.findActiveTicketById(id);
 
+        if(ticket == null){
+            throw new NotFoundException("Ticket not found with id: " + id);
+        }
+
         Event event = fetchEventById(ticketDTO.getEventId());
         if (event == null){
             throw new NotFoundException("Event not found with id: " + ticketDTO.getEventId());
         }
 
-        ticket = Mapper.toTicket(ticketDTO, event);
+        ticket.setCostumerName(ticketDTO.getCostumerName());
+        ticket.setCpf(ticketDTO.getCpf());
+        ticket.setCustomerMail(ticketDTO.getCustomerMail());
+        ticket.setEvent(event);
+        ticket.setUSDamount(ticketDTO.getUSDamount());
+        ticket.setBRLamount(ticketDTO.getBRLamount());
+
         Ticket savedTicket = ticketRepository.save(ticket);
 
         emailService.sendEmailUpdate(ticket);
@@ -190,7 +200,7 @@ public class TicketController {
 
     private Event fetchEventById(String eventId){
 
-        String url = "http://3.142.146.217:8080/api/v1/get-event/" + eventId;
+        String url = "http://3.21.39.39:8080/api/v1/get-event/" + eventId;
         RestTemplate restTemplate = new RestTemplate();
 
         try{

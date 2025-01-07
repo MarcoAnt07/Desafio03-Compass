@@ -1,17 +1,34 @@
 package io.github.marcoant07.ms_ticket_manager.dto;
 
 import io.github.marcoant07.ms_ticket_manager.entity.Event;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 
 public class TicketDTO {
 
     private String id;
+
+    @NotBlank
+    @Size(max = 255)
     private String costumerName;
+
+    @NotBlank
+    @Size(min = 11, max = 14)
     private String cpf;
+
+    @Email
     private String customerMail;
+
+    @NotBlank
     private String eventId;
+
+    @NotBlank
     private Double BRLamount;
+
+    @NotBlank
     private Double USDamount;
     private Boolean deleted;
 

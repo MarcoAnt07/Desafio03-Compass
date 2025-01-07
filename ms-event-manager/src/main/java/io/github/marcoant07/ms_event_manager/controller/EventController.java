@@ -152,7 +152,7 @@ public class EventController {
     @PutMapping("/update-event/{id}")
     public ResponseEntity<Event> updateEventById(@PathVariable("id") String id, @RequestBody EventDTO eventDTO){
 
-        String urlGet = "http://3.131.35.32:8080/api/v1/check-tickets-by-event/" + id;
+        String urlGet = "http://3.133.100.219:8080/api/v1/check-tickets-by-event/" + id;
         RestTemplate restTemplate = new RestTemplate();
 
         List<Ticket> ticketList;

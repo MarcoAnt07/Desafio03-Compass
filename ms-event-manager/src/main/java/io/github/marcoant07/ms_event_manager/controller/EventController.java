@@ -27,7 +27,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("br/com/compass/eventmanagement/v1")
 public class EventController {
 
     @Autowired

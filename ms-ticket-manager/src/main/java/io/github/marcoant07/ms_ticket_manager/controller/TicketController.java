@@ -200,7 +200,7 @@ public class TicketController {
 
     private Event fetchEventById(String eventId){
 
-        String url = "http://3.21.39.39:8080/api/v1/get-event/" + eventId;
+        String url = "http://3.21.39.39:8080/br/com/compass/eventmanagement/v1/get-event/" + eventId;
         RestTemplate restTemplate = new RestTemplate();
 
         try{

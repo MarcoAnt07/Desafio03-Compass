@@ -152,7 +152,7 @@ public class EventController {
     @PutMapping("/update-event/{id}")
     public ResponseEntity<Event> updateEventById(@PathVariable("id") String id, @RequestBody EventDTO eventDTO){
 
-        String urlGet = "http://3.133.100.219:8080/api/v1/check-tickets-by-event/" + id;
+        String urlGet = "http://localhost:8081/api/v1/check-tickets-by-event/" + id;
         RestTemplate restTemplate = new RestTemplate();
 
         List<Ticket> ticketList;
@@ -216,7 +216,7 @@ public class EventController {
     @DeleteMapping("/delete-event/{id}")
     public ResponseEntity<Void> deletePostById(@PathVariable String id){
 
-        String url = "http://3.133.100.219:8080/api/v1/check-tickets-by-event/" + id;
+        String url = "http://localhost:8081/api/v1/check-tickets-by-event/" + id;
         RestTemplate restTemplate = new RestTemplate();
 
         List<Ticket> ticketList;

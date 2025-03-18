@@ -107,6 +107,7 @@ public class TicketControlletUnit {
         Ticket savedTicket = new Ticket("1A", "Aa", "000.000.000-00", "aa@aa.com", event, 600.0, 100.0, false);
 
         Mockito.when(ticketRepository.save(Mockito.any(Ticket.class))).thenReturn(savedTicket);
+        Mockito.when(ticketRepository.findActiveTicketById("1A")).thenReturn(savedTicket);
 
         ResponseEntity<Ticket> response = ticketController.updateTicketById("1A",ticketDTO);
 

@@ -146,10 +146,10 @@ public class EventControllerUnit {
 
     @Test
     void updateEvent_WithAssociatedTicket_ReturnStatus409(){
-        String eventId = "676b04511797cb53fe6a00b5";
+        String eventId = "6797eaf76eeb9a36dafe90ec";
         EventDTO eventDTO = new EventDTO("Updated Event", LocalDateTime.parse("2024-12-30T12:00:00"), "60326-515");
-        Event existingEvent = new Event("676b04511797cb53fe6a00b5", "Cc", LocalDateTime.parse("2024-12-30T21:00:00"), "60311-310", "Rua Santa Inês", "Pirambu", "Fortaleza", "CE");
-        Event updatedEvent = new Event("676b04511797cb53fe6a00b5", "Updated Event", LocalDateTime.parse("2024-12-30T12:00:00"), "60326-515", "Avenida Sargento Hermínio Sampaio", "Monte Castelo", "Fortaleza", "CE");
+        Event existingEvent = new Event("6797eaf76eeb9a36dafe90ec", "Cc", LocalDateTime.parse("2024-12-30T21:00:00"), "60311-310", "Rua Santa Inês", "Pirambu", "Fortaleza", "CE");
+        Event updatedEvent = new Event("6797eaf76eeb9a36dafe90ec", "Updated Event", LocalDateTime.parse("2024-12-30T12:00:00"), "60326-515", "Avenida Sargento Hermínio Sampaio", "Monte Castelo", "Fortaleza", "CE");
 
         Ticket ticket = new Ticket("1B", "Aa", "000.000.000-00", "Aa@aa.com", "676b04511797cb53fe6a00b5", 600.0, 100.0, false);
 
@@ -178,7 +178,7 @@ public class EventControllerUnit {
         NotFoundException notFoundException = Assertions.catchThrowableOfType(() -> eventController.updateEventById(eventId, eventDTO), NotFoundException.class);
 
         Assertions.assertThat(notFoundException).isNotNull();
-        Assertions.assertThat(notFoundException.getMessage()).isEqualTo("Entity not found");
+        Assertions.assertThat(notFoundException.getMessage()).isEqualTo("Event not found");
     }
 
     @Test
@@ -195,9 +195,9 @@ public class EventControllerUnit {
 
     @Test
     void deleteEvent_WithAssociatedTicket_ReturnStatus409(){
-        String eventId = "676b04511797cb53fe6a00b5";
-        Event event = new Event("676b04511797cb53fe6a00b5", "Cc", LocalDateTime.parse("2024-12-30T21:00:00"), "60311-310", "Rua Santa Inês", "Pirambu", "Fortaleza", "CE");
-        Ticket ticket = new Ticket("1B", "Aa", "000.000.000-00", "Aa@aa.com", "676b04511797cb53fe6a00b5", 600.0, 100.0, false);
+        String eventId = "6797eaf76eeb9a36dafe90ec";
+        Event event = new Event("6797eaf76eeb9a36dafe90ec", "Cc", LocalDateTime.parse("2024-12-30T21:00:00"), "60311-310", "Rua Santa Inês", "Pirambu", "Fortaleza", "CE");
+        Ticket ticket = new Ticket("1B", "Aa", "000.000.000-00", "Aa@aa.com", "6797eaf76eeb9a36dafe90ec", 600.0, 100.0, false);
 
         Mockito.when(eventRepository.findById(eventId)).thenReturn(Optional.of(event));
 
